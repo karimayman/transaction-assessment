@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('banks', function (Blueprint $table) {
+        Schema::create('congestion_controls', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("name")->unique();
+            $table->string('instance_id');
+            $table->boolean('status');
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('banks');
+        Schema::dropIfExists('congestion_controls');
     }
 };

@@ -14,6 +14,15 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
+            $table->string("uuid")->unique();
+            $table->string('reference_number');
+            $table->string('direction');
+            $table->jsonb('raw_request');
+            $table->decimal('amount',8,2);
+            $table->integer('bank_id');
+            $table->jsonb('notes')->nullable();
+            $table->boolean('processed')->default(false);
         });
     }
 
