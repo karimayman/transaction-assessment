@@ -22,6 +22,7 @@ class Transaction extends Model
         'processed',
         'stored_request_id',
         ];
+    protected $casts = ['notes' => 'array'];
 
     public function bank(): BelongsTo
     {

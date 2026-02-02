@@ -23,7 +23,7 @@ class RequestCongestionControlAction
             $unprocessedRequests = storedRequest::where('processed', '=', false)->get();
             $dataProcesser = new ProcessIncomingRequests();
             foreach ($unprocessedRequests as $data) {
-                $dataProcesser($data->request);
+                $dataProcesser($data->request, $data->id);
                 $data->processed = true;
                 $data->save();
             }

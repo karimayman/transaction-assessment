@@ -10,6 +10,10 @@ class storedRequest extends Model
     protected $fillable = ['request',
         'processed',];
 
+    protected $casts = [
+        'request' => 'array',
+    ];
+
     public function transaction(): hasMany {
         return $this->hasMany(transaction::class, 'stored_request_id');
     }
