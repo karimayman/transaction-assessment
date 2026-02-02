@@ -27,13 +27,13 @@ class ProcessIncomingRequests
                 $referenceNumber = $transactionDetails[2];
                 $notes = $transactionDetails[3]?? "";
                 $kvNotes = $notesParser->parseNotes($notes);
-                Transaction::create([
+                Transaction::insertOrIgnore([
                     'uuid' => $referenceNumber . $bankId,
                     'reference_number' => $referenceNumber,
                     'direction' => 'incoming',
                     'amount' => (float)$amount,
                     'bank_id' => $bankId,
-                    'notes' => $kvNotes,
+                    'notes' => json_encode($kvNotes),
                     'date' => $date,
                     'stored_request_id' => $requestId
                 ]);
@@ -46,13 +46,13 @@ class ProcessIncomingRequests
                 $referenceNumber = $transactionDetails[1];
                 $notes = $transactionDetails[3] ?? "";
                 $kvNotes = $notesParser->parseNotes($notes);
-                Transaction::create([
+                Transaction::insertOrIgnore([
                     'uuid' => $referenceNumber . $bankId,
                     'reference_number' => $referenceNumber,
                     'direction' => 'incoming',
                     'amount' => (float)$amount,
                     'bank_id' => $bankId,
-                    'notes' => $kvNotes,
+                    'notes' => json_encode($kvNotes),
                     'date' => $date,
                     'stored_request_id' => $requestId
                 ]);
