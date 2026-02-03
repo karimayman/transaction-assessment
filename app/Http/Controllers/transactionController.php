@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\createClientXml;
 use App\Actions\ProcessIncomingRequests;
 use App\Actions\StoreIncomingRequestsAction;
+use App\Jobs\ProcessBankTransaction;
 use App\Models\congestionControl;
 use App\Models\storedRequest;
 use Illuminate\Http\Request;
@@ -21,13 +22,12 @@ class transactionController extends Controller
         $data = $request->getContent();
         $dataStorage = new StoreIncomingRequestsAction();
         $requestId = $dataStorage($data);
+
         if($dataCongestion){
-            StoredRequest::where('id', $requestId)->update(['processed' => !$dataCongestion]);
             return response()->json(['message' => 'ok'], 200);
         }
-        $dataProcesser = new ProcessIncomingRequests();
-        $dataProcesser($data, $requestId);
-        StoredRequest::where('id', $requestId)->update(['processed' => !$dataCongestion]);
+        
+        ProcessBankTransaction::dispatch($data, $requestId);
         return response()->json(['message' => 'ok'], 200);
 
     }

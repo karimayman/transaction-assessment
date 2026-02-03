@@ -11,7 +11,7 @@ class StoreIncomingRequestsAction
      */
     public function __invoke($data)
     {
-       $storedData =  storedRequest::create(['request' =>['data'=> $data], 'processed'=>false]);
+       $storedData =  storedRequest::create(['request' =>['data'=> $data], 'processed'=>false, 'direction'=>'incoming']);
         return $storedData->id;
     }
 }

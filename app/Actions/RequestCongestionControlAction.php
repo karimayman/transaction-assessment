@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use App\Jobs\ProcessBankTransaction;
+use App\Jobs\ProcessClientTransaction;
 use App\Models\storedRequest;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -18,12 +20,10 @@ class RequestCongestionControlAction
 
         DB::transaction(function () use ($instanceId) {
         $congestion = DB::table("congestion_controls")->select('status')->where("instance_id", "=", $instanceId)->lockForUpdate()->first();
-        if (!$congestion) {
-            // TODO create a job to process all unprocessed requests in the background
-            $unprocessedRequests = storedRequest::where('processed', '=', false)->get();
-            $dataProcesser = new ProcessIncomingRequests();
-            foreach ($unprocessedRequests as $data) {
-                $dataProcesser($data->request, $data->id);
+        if ($congestion) {
+            $unprocessedIncomingRequests = storedRequest::where('processed', '=', false)->where('direction', '=', 'incoming')->get();
+            foreach ($unprocessedIncomingRequests as $data) {
+                ProcessBankTransaction::dispatch($data->request["data"], $data->id);
                 $data->processed = true;
                 $data->save();
             }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->json('request');
             $table->boolean('processed');
+            $table->string('direction');
         });
     }
 

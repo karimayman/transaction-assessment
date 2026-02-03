@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class storedRequest extends Model
 {
     protected $fillable = ['request',
-        'processed',];
+        'processed',
+        'direction',
+        ];
 
     protected $casts = [
         'request' => 'array',
